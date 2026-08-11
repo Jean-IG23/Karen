@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Para Ti - 5 Meses</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&display=swap" rel="stylesheet">
+
+    <style>
+        /* --- ESTILOS GENERALES Y SCROLL --- */
+        html { scroll-behavior: smooth; }
+        body { margin: 0; padding: 0; font-family: 'Helvetica Neue', Arial, sans-serif; overflow: hidden; background-color: #0a192f; }
+        .page-section { width: 100%; position: relative; display: flex; justify-content: center; align-items: center; overflow: hidden; flex-direction: column; }
+        
+        /* Alturas de las secciones */
+        #seccion1, #seccion2 { height: 100vh; }
+        #seccion4 { height: 100vh; }
+
+        #seccion1 { background: linear-gradient(to bottom, #74ebd5, #ACB6E5); }
+        #seccion2 { background: linear-gradient(to bottom, #ACB6E5, #1a2a6c); }
+        #seccion3 { 
+            /* Esta sección es más larga para dar espacio a leer */
+            min-height: 200vh; 
+            background: linear-gradient(to bottom, #1a2a6c, #0a192f, #050b14); 
+            position: relative;
+        }
+        #seccion4 { background-color: #050b14; }
+
+        /* --- NUBES --- */
+        .cloud { width: 150px; height: 50px; background: rgba(255, 255, 255, 0.8); border-radius: 50px; position: absolute; z-index: 0; filter: blur(1px); }
+        .cloud::before, .cloud::after { content: ''; position: absolute; background: rgba(255, 255, 255, 0.8); border-radius: 50%; }
+        .cloud::before { width: 70px; height: 70px; top: -30px; left: 20px; }
+        .cloud::after { width: 50px; height: 50px; top: -20px; left: 80px; }
+        .cloud1 { top: 15%; animation: drift 35s linear infinite; }
+        .cloud2 { top: 40%; transform: scale(0.8); opacity: 0.6; animation: drift 50s linear infinite 10s; }
+        .cloud3 { top: 70%; transform: scale(1.2); opacity: 0.9; animation: drift 40s linear infinite 5s; }
+        @keyframes drift { 0% { left: -200px; } 100% { left: 100vw; } }
+
+        /* --- SOBRE Y CARTA --- */
+        .container { position: relative; cursor: pointer; z-index: 10; animation: float 4s ease-in-out infinite; }
+        @keyframes float { 0% { transform: translateY(0px); } 50% { transform: translateY(-15px); } 100% { transform: translateY(0px); } }
+
+        .instruction { color: #ffffff; text-align: center; margin-bottom: 30px; font-size: 1rem; letter-spacing: 1.5px; text-transform: uppercase; font-weight: bold; text-shadow: 0 2px 4px rgba(0,0,0,0.2); animation: pulse 2s infinite; }
+        @keyframes pulse { 0% { opacity: 0.6; } 50% { opacity: 1; } 100% { opacity: 0.6; } }
+
+        .envelope-wrapper { position: relative; width: 450px; height: 280px; background-color: #5DADE2; border-bottom-left-radius: 8px; border-bottom-right-radius: 8px; box-shadow: 0 0 30px rgba(255, 255, 255, 0.8), 0 20px 40px rgba(0,0,0,0.15); }
+        .envelope-front { position: absolute; top: 0; left: 0; width: 0; height: 0; border-top: 140px solid transparent; border-bottom: 140px solid #2E86C1; border-right: 225px solid #3498DB; border-left: 225px solid #3498DB; border-bottom-left-radius: 8px; border-bottom-right-radius: 8px; z-index: 3; pointer-events: none; }
+        .flap { position: absolute; top: 0; left: 0; width: 0; height: 0; border-top: 155px solid #85C1E9; border-right: 225px solid transparent; border-bottom: 125px solid transparent; border-left: 225px solid transparent; z-index: 4; transform-origin: top; transition: transform 0.6s ease-in-out; pointer-events: none; }
+        
+        .letter { position: absolute; bottom: 15px; left: 2%; width: 96%; height: 240px; background-color: #fafafa; border-radius: 6px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); z-index: 2; transition: height 0.8s ease-in-out 0.6s, transform 0.8s ease-in-out 0.6s, z-index 0s 0.6s; padding: 25px; box-sizing: border-box; overflow: hidden; font-family: 'Caveat', cursive; }
+        .letter h1 { margin: 0 0 10px 0; font-size: 2.2rem; color: #1A5276; text-align: center; border-bottom: 2px solid #AED6F1; padding-bottom: 5px; min-height: 40px; }
+        .letter p { font-size: 1.6rem; color: #444; line-height: 1.2; margin-bottom: 15px; text-align: justify; min-height: 20px; }
+        .letter::-webkit-scrollbar { width: 6px; }
+        .letter::-webkit-scrollbar-thumb { background: #85C1E9; border-radius: 4px; }
+
+        .open .flap { transform: rotateX(180deg); z-index: 1; }
+        .open .letter { height: 420px; transform: translateY(-70px); z-index: 5; overflow-y: auto; }
+
+        /* --- BOTONES FLOTANTES --- */
+        .indicator-wrapper { position: fixed; z-index: 20; opacity: 0; pointer-events: none; transition: opacity 0.8s ease-in-out 3.5s; cursor: pointer; }
+        .indicator-wrapper.visible { opacity: 1; pointer-events: auto; }
+        .nav-circle { width: 50px; height: 50px; background-color: rgba(255, 255, 255, 0.3); backdrop-filter: blur(5px); border-radius: 50%; display: flex; justify-content: center; align-items: center; color: #1A5276; font-size: 22px; font-family: 'Helvetica Neue', Arial, sans-serif; font-weight: bold; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+        .back-to-top { position: fixed; bottom: 30px; right: 30px; z-index: 50; opacity: 0; pointer-events: none; transition: opacity 0.3s ease; cursor: pointer; }
+        .back-to-top.visible { opacity: 1; pointer-events: auto; }
+        .up-arrow::after { content: "❯"; display: block; transform: rotate(-90deg); }
+
+        @media (min-width: 769px) {
+            .indicator-wrapper { right: 40px; top: 50%; margin-top: -25px; }
+            .nav-circle.down-arrow { animation: bounceRight 2s infinite ease-in-out; }
+            .nav-circle.down-arrow::after { content: "❯"; }
+            @keyframes bounceRight { 0%, 100% { transform: translateX(0); } 50% { transform: translateX(10px); } }
+        }
+        @media (max-width: 768px) {
+            .indicator-wrapper { left: 50%; bottom: 30px; margin-left: -25px; }
+            .nav-circle.down-arrow { animation: bounceDown 2s infinite ease-in-out; }
+            .nav-circle.down-arrow::after { content: "❯"; display: block; transform: rotate(90deg); }
+            @keyframes bounceDown { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(10px); } }
+            .envelope-wrapper { transform: scale(0.8); }
+            .back-to-top { right: 20px; bottom: 20px; }
+            .nav-circle.up-arrow { width: 45px; height: 45px; font-size: 18px; }
+        }
+
+        /* --- SECCIÓN 2: VIDEO ANIMADO DE COCO --- */
+        .big-message { font-family: 'Caveat', cursive; font-size: 3.5rem; color: #ffffff; text-shadow: 3px 3px 6px rgba(0,0,0,0.3); text-align: center; margin-bottom: 20px; z-index: 10; line-height: 1.1; }
+        .sub-message { font-size: 2.2rem; display: block; margin-top: 10px; color: #fdfdfd; font-weight: 500; text-shadow: 2px 2px 4px rgba(0,0,0,0.4); }
+        
+        .art-container {
+            position: relative;
+            width: 320px; 
+            height: 480px; 
+            background-color: #000; 
+            border-radius: 8px;
+            overflow: hidden;
+            z-index: 10;
+            opacity: 0; 
+            transform: translateY(150px) rotate(-10deg) scale(0.8); 
+        }
+
+        @keyframes magicalDrop {
+            0% { opacity: 0; transform: translateY(150px) rotate(-10deg) scale(0.8); box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
+            60% { opacity: 1; transform: translateY(-20px) rotate(3deg) scale(1.05); box-shadow: 0 40px 60px rgba(0,0,0,0.4); }
+            100% { opacity: 1; transform: translateY(0) rotate(0deg) scale(1); box-shadow: 0 20px 40px rgba(0,0,0,0.5); }
+        }
+
+        .art-container.reveal-active {
+            animation: magicalDrop 1.2s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+        }
+
+        .real-painting { width: 100%; height: 100%; object-fit: cover; display: block; border-radius: 8px; }
+
+        @media (max-width: 768px) {
+            .art-container { width: 280px; height: 420px; }
+            .big-message { font-size: 2.8rem; }
+            .sub-message { font-size: 1.8rem; }
+        }
+
+        /* --- SECCIÓN 3: MAGIA DE FAROLES Y ESTRELLAS --- */
+        .canvas-estrellas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            pointer-events: none; /* Deja que los toques pasen a la pantalla */
+        }
+
+        /* Contenedor de Faroles */
+        .lantern-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: 0;
+        }
+
+        .lantern {
+            position: absolute;
+            bottom: -100px;
+            width: 30px;
+            height: 45px;
+            background: rgba(255, 179, 71, 0.8);
+            border-radius: 8px;
+            box-shadow: 0 0 20px #ffb347, inset 0 0 10px #ff8c00;
+            animation: floatUp infinite linear;
+            opacity: 0.8;
+        }
+
+        .lantern::after {
+            content: '';
+            position: absolute;
+            bottom: -5px; left: 50%;
+            transform: translateX(-50%);
+            width: 2px; height: 10px;
+            background: rgba(255,255,255,0.5);
+        }
+
+        @keyframes floatUp {
+            0% { transform: translateY(0) rotate(0deg); opacity: 0; }
+            10% { opacity: 0.8; }
+            90% { opacity: 0.8; }
+            100% { transform: translateY(-120vh) rotate(20deg); opacity: 0; }
+        }
+
+        /* Textos Elegantes y Profundos */
+        .fade-container { 
+            width: 100%; 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            position: relative; 
+            z-index: 10; 
+            padding: 100px 0;
+        }
+        
+        .fade-block { 
+            min-height: 40vh; /* Distancia entre frases */
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            width: 85%; 
+            max-width: 800px; 
+        }
+        
+        .fade-text { 
+            font-family: 'Caveat', cursive; 
+            font-size: 3.8rem; 
+            color: #ffeaa7; /* Un tono dorado claro */
+            text-align: center; 
+            text-shadow: 0 0 15px rgba(255, 234, 167, 0.5), 2px 2px 5px rgba(0,0,0,0.8); 
+            opacity: 0; 
+            transform: translateY(40px) scale(0.95); 
+            transition: opacity 1.5s ease-out, transform 1.5s ease-out; 
+        }
+        
+        .fade-text.visible { 
+            opacity: 1; 
+            transform: translateY(0) scale(1); 
+        }
+
+        @media (max-width: 768px) {
+            .fade-text { font-size: 2.4rem; }
+            .fade-block { min-height: 35vh; }
+        }
+
+        /* --- SECCIÓN 4: BOTÓN DE PÁNICO --- */
+        .glass-btn { background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.3); border-radius: 30px; padding: 20px 40px; color: #ffffff; font-size: 1.2rem; font-weight: bold; letter-spacing: 2px; text-transform: uppercase; cursor: pointer; box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3); transition: all 0.3s ease; overflow: hidden; }
+        .glass-btn:hover { transform: translateY(-5px); background: rgba(255, 255, 255, 0.2); box-shadow: 0 12px 40px 0 rgba(255, 255, 255, 0.2); }
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.8); backdrop-filter: blur(8px); display: flex; justify-content: center; align-items: center; z-index: 100; opacity: 0; pointer-events: none; transition: opacity 0.5s ease; }
+        .modal-overlay.active { opacity: 1; pointer-events: auto; }
+        .modal-content { background: #fafafa; width: 90%; max-width: 500px; border-radius: 12px; padding: 40px; text-align: center; box-shadow: 0 20px 50px rgba(0,0,0,0.5); transform: scale(0.8); transition: transform 0.5s ease; }
+        .modal-overlay.active .modal-content { transform: scale(1); }
+        .modal-text { font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 1.1rem; color: #333; line-height: 1.6; margin-bottom: 20px; text-align: left; }
+        .close-btn { background: #E74C3C; color: white; border: none; padding: 12px 25px; border-radius: 25px; font-weight: bold; font-size: 1rem; cursor: pointer; transition: 0.3s; margin-top: 15px; }
+        .close-btn:hover { background: #c0392b; }
+    </style>
+</head>
+<body>
+
+    <audio id="musicaFondo" src="cancion.mp3"></audio>
+
+    <section class="page-section" id="seccion1">
+        <div class="cloud cloud1"></div>
+        <div class="cloud cloud2"></div>
+        <div class="cloud cloud3"></div>
+
+        <div class="container" onclick="abrirCarta()">
+            <div class="instruction" id="textoClick">Haz clic para abrir</div>
+            <div class="envelope-wrapper" id="sobre">
+                <div class="flap"></div>
+                <div class="envelope-front"></div>
+                <div class="letter">
+                    <h1 id="linea1"></h1>
+                    <p id="linea2"></p>
+                    <p id="linea3"></p>
+                    <p id="linea4"></p>
+                    <p id="linea5"></p>
+                    <p id="linea6"></p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECCIÓN 2: EL VIDEO ANIMADO -->
+    <section class="page-section" id="seccion2">
+        <h2 class="big-message">
+            Esta es la sorpresa, dale play.<br>
+            <span class="sub-message">Es algo corto pero lo hice pensando en el mucho amor que le tienes.</span>
+        </h2>
+        
+        <div class="art-container" id="contenedorArte">
+            <video id="pinturaReal" class="real-painting" poster="image_9cc394.jpg" controls>
+                <source src="video_coco.mp4" type="video/mp4">
+                Tu navegador no soporta videos.
+            </video>
+        </div>
+    </section>
+
+    <!-- SECCIÓN 3: FAROLES Y POLVO DE ESTRELLAS -->
+    <section class="page-section" id="seccion3">
+        
+        <!-- Contenedor para los Faroles CSS -->
+        <div class="lantern-container" id="lanterns">
+            <!-- Los faroles se generarán con JavaScript -->
+        </div>
+
+        <!-- Canvas para el polvo de estrellas al tocar/mover el mouse -->
+        <canvas class="canvas-estrellas" id="stardustCanvas"></canvas>
+
+        <div class="fade-container">
+            <div class="fade-block"><h3 class="fade-text">A veces me detengo a pensar en lo rápido que han pasado estos 5 meses...</h3></div>
+            <div class="fade-block"><h3 class="fade-text">Y me doy cuenta de que hemos construido un equipo increíble.</h3></div>
+            <div class="fade-block"><h3 class="fade-text">Mi mayor deseo es verte feliz y triunfando, todo lo que te propongas y ser parte de ello...</h3></div>
+            <div class="fade-block"><h3 class="fade-text">Veo cómo logras calmar mi mundo cuando los proyectos y la universidad me tienen al límite</h3></div>
+            <div class="fade-block"><h3 class="fade-text">Te amo mucho y espero que este programa aunque ya te eh hehco mucho te lo demuestre.</h3></div>
+            <div class="fade-block"><h3 class="fade-text">Gracias por ser mi refugio, mi tranquilidad y mi lugar seguro.</h3></div>
+        </div>
+    </section>
+
+    <!-- SECCIÓN 4: BOTÓN DE PÁNICO -->
+    <section class="page-section" id="seccion4">
+        <button class="glass-btn" onclick="abrirModal()">Para cuando tengas un mal día o cuando tu quieras leerlo</button>
+    </section>
+
+    <!-- EL MODAL (Carta Oculta de Emergencia) -->
+    <div class="modal-overlay" id="modalEmergencia">
+        <div class="modal-content">
+            <h2 style="color: #1A5276; margin-top: 0; font-family: 'Caveat', cursive; font-size: 2.5rem;">Aquí estoy</h2>
+            <p class="modal-text">Sé que a veces el estrés y la rutina pueden ser muy pesados. Solo quiero dejar esto aquí grabado para que lo leas siempre que lo necesites.</p>
+            <p class="modal-text">Eres increíble, eres fuerte y te admiro muchísimo. Nunca olvides que aquí estoy y aquí me voy a quedar: para escucharte, para llevarte comida cuando no quieras cocinar (¡una buena lasaña o guatitas), y para recordarte todos los días lo mucho que vales.</p>
+            <p class="modal-text"><em>P.D. Sé lo especial que era el buen Coco, así que busqué la forma de traerlo en código para que nos acompañe celebrando este dia tan especial para nosotros. Te amo.</em></p>
+            <button class="close-btn" onclick="cerrarModal()">Cerrar Mensaje</button>
+        </div>
+    </div>
+
+    <div class="indicator-wrapper" id="flechaIndicador" onclick="bajarASegundaSeccion()">
+        <div class="nav-circle down-arrow"></div>
+    </div>
+
+    <div class="back-to-top" id="btnVolver" onclick="volverArriba()">
+        <div class="nav-circle up-arrow"></div>
+    </div>
+
+    <script>
+        const textos = [
+            { id: 'linea1', texto: 'Felices 5 meses' },
+            { id: 'linea2', texto: 'Desde aquel 12 de marzo, el tiempo ha pasado volando y ya estamos en nuestro quinto mes juntos. Cada día contigo es un regalo y quiero que sepas lo mucho que significas para mí.' },
+            { id: 'linea3', texto: 'Tu presencia en mi vida es un tesoro inestimable, y cada momento a tu lado es un regalo que aprecio profundamente, gracias por todo lo que haces por mí, por hacerme sonreír todos los días y por ser la persona más especial que tengo.' },
+            { id: 'linea4', texto: 'Te amo mucho y quiero que sepas lo mucho que te amo y estoy aquí para ti siempre en lo que necesites siempre siendo tu mejor amigo y mas que eso siendo tu pareja.' },
+            { id: 'linea5', texto: 'Gracias por ser mi refugio, mi tranquilidad y mi lugar seguro. Te amo mucho y espero que este programa aunque ya te eh hehco mucho te lo demuestre.' },
+            { id: 'linea6', texto: 'Felices 5 meses amor mío que esto solo sea el principio de algo maravilloso y algo eterno.' }
+        ];
+
+        let currentLine = 0;
+        let currentChar = 0;
+        let videoRevelado = false; 
+
+        function escribirTexto() {
+            if (currentLine < textos.length) {
+                let lineaActual = textos[currentLine];
+                let elemento = document.getElementById(lineaActual.id);
+                
+                if (currentChar < lineaActual.texto.length) {
+                    elemento.innerHTML += lineaActual.texto.charAt(currentChar);
+                    currentChar++;
+                    setTimeout(escribirTexto, 30); 
+                } else {
+                    currentLine++;
+                    currentChar = 0;
+                    setTimeout(escribirTexto, 300); 
+                }
+            }
+        }
+
+        function abrirCarta() {
+            const sobre = document.getElementById('sobre');
+            const musica = document.getElementById('musicaFondo');
+            const texto = document.getElementById('textoClick');
+            const flecha = document.getElementById('flechaIndicador');
+            
+            if(!sobre.classList.contains('open')) {
+                sobre.classList.add('open');
+                texto.style.display = 'none';
+                flecha.classList.add('visible');
+                
+                musica.play().catch(error => console.log("Navegador bloqueó el auto-play de audio"));
+
+                setTimeout(escribirTexto, 1500);
+            }
+        }
+
+        function bajarASegundaSeccion() {
+            document.body.style.overflowY = 'auto';
+            document.getElementById('flechaIndicador').style.display = 'none';
+            document.getElementById('seccion2').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        window.addEventListener('scroll', () => {
+            const currentScroll = window.scrollY;
+            const windowHeight = window.innerHeight;
+            
+            const btnVolver = document.getElementById('btnVolver');
+            if (currentScroll > windowHeight / 2) {
+                btnVolver.classList.add('visible');
+            } else {
+                btnVolver.classList.remove('visible');
+            }
+
+            // Animación mágica del cuadro de video
+            const seccion2 = document.getElementById('seccion2');
+            const contenedorArte = document.getElementById('contenedorArte');
+            
+            if (!videoRevelado && currentScroll > (seccion2.offsetTop - windowHeight/1.2)) {
+                videoRevelado = true; 
+                contenedorArte.classList.add('reveal-active'); 
+            }
+        });
+
+        function volverArriba() {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Observador para los textos de la sección 3
+        const observador = new IntersectionObserver((entradas) => {
+            entradas.forEach(entrada => {
+                if (entrada.isIntersecting) {
+                    entrada.target.classList.add('visible');
+                }
+            });
+        }, { threshold: 0.5 });
+
+        document.querySelectorAll('.fade-text').forEach((el) => observador.observe(el));
+
+        // --- LÓGICA PARA LOS FAROLES FLOTANTES ---
+        function crearFaroles() {
+            const contenedor = document.getElementById('lanterns');
+            const cantidad = 15; // Cantidad de faroles
+            
+            for (let i = 0; i < cantidad; i++) {
+                let linterna = document.createElement('div');
+                linterna.classList.add('lantern');
+                // Posición horizontal aleatoria
+                linterna.style.left = Math.random() * 100 + 'vw';
+                // Animación de duración y retraso diferente para cada uno
+                let duracion = Math.random() * 10 + 15; // Entre 15 y 25 segundos
+                let retraso = Math.random() * 15;
+                linterna.style.animationDuration = duracion + 's';
+                linterna.style.animationDelay = retraso + 's';
+                
+                // Variación de tamaño ligero
+                let escala = Math.random() * 0.5 + 0.5;
+                linterna.style.transform = `scale(${escala})`;
+                
+                contenedor.appendChild(linterna);
+            }
+        }
+        crearFaroles();
+
+        // --- LÓGICA PARA EL POLVO DE ESTRELLAS INTERACTIVO ---
+        const canvas = document.getElementById('stardustCanvas');
+        const ctx = canvas.getContext('2d');
+        let particulas = [];
+        const seccion3 = document.getElementById('seccion3');
+
+        function ajustarCanvas() {
+            canvas.width = seccion3.offsetWidth;
+            canvas.height = seccion3.offsetHeight;
+        }
+        window.addEventListener('resize', ajustarCanvas);
+        ajustarCanvas();
+
+        function crearParticula(x, y) {
+            particulas.push({
+                x: x,
+                y: y,
+                size: Math.random() * 3 + 1,
+                life: 1,
+                velX: (Math.random() - 0.5) * 1.5,
+                velY: (Math.random() - 0.5) * 1.5
+            });
+        }
+
+        // Eventos para mouse y touch (Dedo)
+        seccion3.addEventListener('mousemove', (e) => {
+            const rect = canvas.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            for(let i=0; i<3; i++) crearParticula(x, y); // Crea 3 estrellitas por movimiento
+        });
+
+        seccion3.addEventListener('touchmove', (e) => {
+            const rect = canvas.getBoundingClientRect();
+            const x = e.touches[0].clientX - rect.left;
+            const y = e.touches[0].clientY - rect.top;
+            for(let i=0; i<3; i++) crearParticula(x, y);
+        });
+
+        function animarParticulas() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            for (let i = 0; i < particulas.length; i++) {
+                let p = particulas[i];
+                // Color dorado como polvo de hadas/estrellas
+                ctx.fillStyle = `rgba(255, 234, 167, ${p.life})`;
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+                ctx.fill();
+                p.x += p.velX;
+                p.y += p.velY;
+                p.life -= 0.02; // Velocidad con la que desaparecen
+            }
+            particulas = particulas.filter(p => p.life > 0);
+            requestAnimationFrame(animarParticulas);
+        }
+        animarParticulas();
+
+        // Modal
+        function abrirModal() { document.getElementById('modalEmergencia').classList.add('active'); }
+        function cerrarModal() { document.getElementById('modalEmergencia').classList.remove('active'); }
+
+        // --- SOLUCIÓN B: FADE IN/OUT PROFESIONAL ---
+
+// Buscamos los elementos
+const audioFondo = document.getElementById('musicaFondo');
+const vidCoco = document.getElementById('pinturaReal');
+
+// Función para bajar el volumen suavemente (Fade Out)
+function fadeOutAudio(audioElement, callback) {
+    let volume = audioElement.volume;
+    const interval = 50; // milisegundos entre cada bajada
+    const fade = setInterval(() => {
+        // Bajamos el volumen en un 5% cada vez
+        if (volume > 0.05) {
+            volume -= 0.05;
+            audioElement.volume = volume;
+        } else {
+            // Cuando ya está casi en silencio, lo paramos
+            clearInterval(fade);
+            audioElement.volume = 0;
+            audioElement.pause();
+            // Avisamos que ya terminamos el fade out
+            if (callback) callback();
+        }
+    }, interval);
+}
+
+// Función para subir el volumen suavemente (Fade In)
+function fadeInAudio(audioElement) {
+    audioElement.play(); // Aseguramos que esté en play
+    let volume = 0;
+    audioElement.volume = 0;
+    const interval = 50;
+    const fade = setInterval(() => {
+        // Subimos el volumen en un 5% cada vez
+        if (volume < 0.95) {
+            volume += 0.05;
+            audioElement.volume = volume;
+        } else {
+            // Cuando llega al volumen total (o casi total), paramos
+            clearInterval(fade);
+            audioElement.volume = 1; // Volumen al 100%
+        }
+    }, interval);
+}
+
+// Eventos del video
+vidCoco.addEventListener('play', () => {
+    // Iniciamos el fade out de la música
+    fadeOutAudio(audioFondo);
+});
+
+vidCoco.addEventListener('pause', () => {
+    // Iniciamos el fade in de la música
+    fadeInAudio(audioFondo);
+});
+
+vidCoco.addEventListener('ended', () => {
+    // Iniciamos el fade in de la música
+    fadeInAudio(audioFondo);
+});
+    </script>
+</body>
+</html>
