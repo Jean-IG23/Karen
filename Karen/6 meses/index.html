@@ -12,7 +12,7 @@
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'DM Sans', sans-serif; }
 
         body {
-            background-color: #fdfbf7; display: flex; justify-content: center; align-items: flex-start;
+            background-color: #fdfbf7; display: flex; justify-content: center; align-items: center;
             min-height: 100vh; overflow-y: auto; overflow-x: hidden; color: #5c4052;
             background-image: radial-gradient(#e6e1d8 1px, transparent 1px); background-size: 20px 20px;
         }
@@ -24,33 +24,16 @@
         @keyframes floatUp { 0% { transform: translateY(0) rotate(0deg); opacity: 0; } 10% { opacity: 0.6; } 90% { opacity: 0.6; } 100% { transform: translateY(-110vh) rotate(360deg); opacity: 0; } }
 
         /* =========================
-           MENSAJE DE GIRAR PANTALLA
+           CONTENEDOR DEL LIBRO (PC)
         ========================= */
-        #rotate-message { display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background-color: #fdfbf7; z-index: 9999; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 30px; }
-        #rotate-message h2 { font-family: 'Pacifico', cursive; font-size: 35px; color: #d15688; margin-bottom: 20px; }
-        #rotate-message p { font-size: 18px; color: #9c7387; }
-        .phone-icon { font-size: 60px; margin-bottom: 20px; animation: rotatePhone 2.5s ease-in-out infinite; }
-        @keyframes rotatePhone { 0% { transform: rotate(0deg); } 50% { transform: rotate(-90deg); } 100% { transform: rotate(-90deg); } }
-        @media screen and (max-width: 900px) and (orientation: portrait) { #rotate-message { display: flex; } .scale-wrapper { opacity: 0; pointer-events: none; } }
-
-        /* =========================
-           CONTENEDOR DEL LIBRO
-        ========================= */
-        .scale-wrapper { transform: scale(1); transition: transform 0.3s; z-index: 10; margin: auto; margin-top: 5vh; padding-bottom: 120px; transform-origin: top center; }
-        @media (max-height: 750px) { .scale-wrapper { transform: scale(0.8); } }
-        @media (max-height: 600px) { .scale-wrapper { transform: scale(0.65); } }
-        @media (max-height: 480px) { .scale-wrapper { transform: scale(0.55); } }
-        @media (max-height: 400px) { .scale-wrapper { transform: scale(0.45); } }
-        @media (max-height: 320px) { .scale-wrapper { transform: scale(0.35); } }
+        .scale-wrapper { transform: scale(1); transition: transform 0.3s; z-index: 10; margin: auto; padding: 40px 0; }
+        @media (max-width: 1050px) { .scale-wrapper { transform: scale(0.85); } }
 
         .book-container { display: flex; justify-content: center; align-items: center; perspective: 2000px; }
         .book { position: relative; width: 450px; height: 600px; transition: transform 0.6s cubic-bezier(0.645, 0.045, 0.355, 1); transform: translateX(0); }
         .book.open { transform: translateX(225px); }
         .book.closed-end { transform: translateX(450px); }
 
-        /* =========================
-           HOJAS DEL LIBRO
-        ========================= */
         .paper { position: absolute; width: 100%; height: 100%; top: 0; left: 0; perspective: 2000px; transform-style: preserve-3d; transition: transform 0.8s cubic-bezier(0.645, 0.045, 0.355, 1), z-index 0.8s; transform-origin: left center; cursor: pointer; }
         .paper.flipped { transform: rotateY(-180deg); }
         .front, .back { position: absolute; width: 100%; height: 100%; backface-visibility: hidden; background-color: #fffafc; padding: 40px 35px; box-shadow: inset 0 0 20px rgba(0,0,0,0.03); display: flex; flex-direction: column; overflow: hidden; }
@@ -63,161 +46,114 @@
            ESTILOS DE CONTENIDO
         ========================= */
         h1, h2 { font-family: 'Pacifico', cursive; color: #d15688; text-align: center; }
-        h1 { font-size: 45px; margin-top: 60px; line-height: 1.2; }
-        h2 { font-size: 30px; margin-bottom: 10px; }
-        .subtitle { text-align: center; font-size: 15px; color: #9c7387; margin-bottom: 25px; }
-        .portada { background: linear-gradient(135deg, #f58ab5, #c9a7ef); color: white; align-items: center; justify-content: center; border-radius: 10px 20px 20px 10px; }
-        .portada h1 { color: white; margin-top: 0; font-size: 65px; text-shadow: 0 5px 15px rgba(0,0,0,0.2); }
-        .portada p { margin-top: 25px; font-weight: bold; letter-spacing: 2px; font-size: 18px;}
-        .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 15px; font-size: 15px; }
+        h1 { font-size: 42px; margin-top: 40px; line-height: 1.2; }
+        h2 { font-size: 26px; margin-bottom: 10px; }
+        .subtitle { text-align: center; font-size: 14px; color: #9c7387; margin-bottom: 20px; }
+        .portada { background: linear-gradient(135deg, #f58ab5, #c9a7ef); color: white; align-items: center; justify-content: center; border-radius: 15px; }
+        .portada h1 { color: white; margin-top: 0; font-size: 55px; text-shadow: 0 5px 15px rgba(0,0,0,0.2); }
+        .portada p { margin-top: 20px; font-weight: bold; letter-spacing: 2px; font-size: 16px;}
+        
+        .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 10px; font-size: 14px; }
         .form-group { display: flex; flex-direction: column; }
-        .form-group label { font-weight: 700; color: #a16480; margin-bottom: 8px; }
-        .form-group input, .form-group select { padding: 10px; border: 1px solid #ecc9da; border-radius: 8px; background: #fff; outline: none; font-family: 'DM Sans'; font-size: 14px; }
-        .radio-group { grid-column: span 2; margin-top: 15px; font-weight: 700; color: #a16480; font-size: 15px; }
-        .radio-options { display: flex; justify-content: space-between; margin-top: 12px; font-weight: normal; }
-        .btn-guardar { grid-column: span 2; background-color: #c92a62; color: white; border: none; padding: 15px; border-radius: 25px; font-weight: bold; margin-top: 25px; cursor: pointer; font-size: 16px; }
-        .polaroid-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 15px; }
-        .polaroid { background: white; padding: 12px 12px 25px 12px; border-radius: 6px; box-shadow: 0 6px 20px rgba(0,0,0,0.08); text-align: center; font-family: 'Pacifico'; font-size: 15px; color: #775165; transform: rotate(-3deg); }
+        .form-group label { font-weight: 700; color: #a16480; margin-bottom: 5px; }
+        .form-group input, .form-group select { padding: 8px; border: 1px solid #ecc9da; border-radius: 8px; background: #fff; outline: none; font-family: 'DM Sans'; font-size: 13px; }
+        .radio-group { grid-column: span 2; margin-top: 10px; font-weight: 700; color: #a16480; font-size: 14px; }
+        .radio-options { display: flex; justify-content: space-between; margin-top: 8px; font-weight: normal; }
+        .btn-guardar { grid-column: span 2; background-color: #c92a62; color: white; border: none; padding: 12px; border-radius: 25px; font-weight: bold; margin-top: 15px; cursor: pointer; font-size: 15px; }
+        
+        .polaroid-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 10px; }
+        .polaroid { background: white; padding: 10px 10px 20px 10px; border-radius: 6px; box-shadow: 0 6px 20px rgba(0,0,0,0.08); text-align: center; font-family: 'Pacifico'; font-size: 14px; color: #775165; transform: rotate(-3deg); }
         .polaroid:nth-child(even) { transform: rotate(4deg); }
-        .polaroid img { width: 100%; height: 130px; object-fit: cover; border-radius: 4px; margin-bottom: 10px; background: #eee;}
-        .carta-texto { font-size: 16px; line-height: 1.8; color: #6b4d5e; }
-        .firma { font-family: 'Pacifico'; color: #d15688; text-align: right; margin-top: 25px; font-size: 24px;}
-        .poema { text-align: center; font-family: 'Pacifico'; font-size: 22px; color: #a16480; line-height: 2; margin-top: 30px;}
-        .vale-descanso { border: 3px dashed #d15688; border-radius: 15px; padding: 30px 20px; text-align: center; background-color: #fff0f5; margin-top: 30px; position: relative; }
-        .vale-descanso h3 { font-family: 'Pacifico'; color: #c92a62; font-size: 28px; margin-bottom: 15px; }
-        .vale-descanso p { font-weight: bold; color: #6b4d5e; font-size: 15px; }
-        .flor-img { width: 100%; height: 200px; object-fit: cover; border-radius: 15px; margin-top: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.1);}
-        .nav-buttons { position: absolute; bottom: -80px; display: flex; gap: 30px; opacity: 0; transition: opacity 0.5s; pointer-events: none; }
+        .polaroid img { width: 100%; height: 110px; object-fit: cover; border-radius: 4px; margin-bottom: 8px; background: #eee;}
+        
+        .carta-texto { font-size: 15px; line-height: 1.7; color: #6b4d5e; }
+        .firma { font-family: 'Pacifico'; color: #d15688; text-align: right; margin-top: 20px; font-size: 22px;}
+        .poema { text-align: center; font-family: 'Pacifico'; font-size: 20px; color: #a16480; line-height: 1.8; margin-top: 20px;}
+        
+        .vale-descanso { border: 3px dashed #d15688; border-radius: 15px; padding: 25px 15px; text-align: center; background-color: #fff0f5; margin-top: 20px; position: relative; }
+        .vale-descanso h3 { font-family: 'Pacifico'; color: #c92a62; font-size: 24px; margin-bottom: 10px; }
+        .vale-descanso p { font-weight: bold; color: #6b4d5e; font-size: 14px; }
+        
+        .flor-img { width: 100%; height: 180px; object-fit: cover; border-radius: 15px; margin-top: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.1);}
+        
+        .nav-buttons { position: absolute; bottom: -70px; left: 50%; transform: translateX(-50%); display: flex; gap: 20px; opacity: 0; transition: opacity 0.5s; pointer-events: none; }
         .nav-buttons.show { opacity: 1; pointer-events: all; }
-        .nav-btn { background: #d15688; color: #fff; border: none; box-shadow: 0 8px 20px rgba(209, 86, 136, 0.3); padding: 12px 30px; border-radius: 25px; cursor: pointer; font-weight: bold; font-size: 16px; transition: 0.3s; }
+        .nav-btn { background: #d15688; color: #fff; border: none; box-shadow: 0 8px 20px rgba(209, 86, 136, 0.3); padding: 10px 25px; border-radius: 25px; cursor: pointer; font-weight: bold; font-size: 15px; transition: 0.3s; }
         .nav-btn:hover { background: #b04370; transform: translateY(-3px); }
-        .page-num { position: absolute; bottom: 20px; font-size: 13px; color: #b391a3; font-weight: bold;}
-        .page-num.left { left: 30px; }
-        .page-num.right { right: 30px; }
+        .page-num { position: absolute; bottom: 15px; font-size: 12px; color: #b391a3; font-weight: bold;}
+        .page-num.left { left: 25px; }
+        .page-num.right { right: 25px; }
 
-        /* =========================
-           JARDÍN MÁGICO ANIMADO Y CON VIENTO
-        ========================= */
-        .magic-garden {
-            display: flex; justify-content: space-evenly; align-items: flex-end;
-            height: 180px; margin-top: 30px; padding-bottom: 15px;
-            position: relative; overflow: visible;
+        /* JARDÍN MÁGICO */
+        .magic-garden { display: flex; justify-content: space-evenly; align-items: flex-end; height: 160px; margin-top: 20px; padding-bottom: 10px; position: relative; overflow: visible; }
+        .magic-garden::after { content: ''; position: absolute; bottom: 0; left: -10%; width: 120%; height: 30px; background: #7cb342; border-radius: 50% 50% 0 0; z-index: 5; }
+        .flower { position: relative; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; transform-origin: bottom center; animation: sway 3s ease-in-out infinite alternate; z-index: 4; }
+        @keyframes sway { 0% { transform: rotate(-5deg); } 100% { transform: rotate(5deg); } }
+        .f1 { animation-delay: 0s; } .f2 { animation-delay: -1s; } .f3 { animation-delay: -2s; } .f4 { animation-delay: -1.5s; } .f5 { animation-delay: -0.5s; }
+        .stem { width: 4px; background: #689f38; border-radius: 3px; transform-origin: bottom; transform: scaleY(0); transition: transform 1.2s ease-in-out; }
+        .f4 .stem { height: 60px; transition-delay: 0.2s; } .f1 .stem { height: 95px; transition-delay: 0.4s; } .f2 .stem { height: 120px; transition-delay: 0.6s; } .f3 .stem { height: 100px; transition-delay: 0.8s; } .f5 .stem { height: 80px; transition-delay: 1.0s; }
+        .flower-head { position: absolute; bottom: 100%; margin-bottom: -3px; transform: scale(0); opacity: 0; transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.8s; z-index: 2; }
+        .f4 .flower-head { transition-delay: 1.0s; } .f1 .flower-head { transition-delay: 1.2s; } .f2 .flower-head { transition-delay: 1.4s; } .f3 .flower-head { transition-delay: 1.6s; } .f5 .flower-head { transition-delay: 1.8s; }
+        .leaf { position: absolute; width: 16px; height: 8px; background: #689f38; border-radius: 12px 0 12px 0; bottom: 15px; transform: scale(0); transition: transform 0.8s; }
+        .leaf-left { left: -12px; transform-origin: right bottom; transition-delay: 1s; } .leaf-right { right: -12px; border-radius: 0 12px 0 12px; transform-origin: left bottom; transition-delay: 1.3s; }
+        .clavel { width: 38px; height: 30px; background: #c9a7ef; border-radius: 40px 40px 8px 8px; clip-path: polygon(0% 10%, 15% 0%, 30% 15%, 45% 0%, 60% 15%, 75% 0%, 90% 15%, 100% 0%, 100% 100%, 0% 100%); }
+        .tulip { width: 30px; height: 38px; position: relative; }
+        .tulip .petal { position: absolute; bottom: 0; width: 100%; height: 100%; border-radius: 40px 40px 8px 8px; }
+        .tulip .center { background: #f48fb1; z-index: 2; } .tulip .left { background: #f06292; transform: rotate(-15deg); transform-origin: bottom left; z-index: 1; left: -6px;} .tulip .right { background: #f06292; transform: rotate(15deg); transform-origin: bottom right; z-index: 1; right: -6px;}
+        .tulip-yellow .center { background: #fff59d; } .tulip-yellow .left, .tulip-yellow .right { background: #fbc02d; }
+        .gerbera { width: 45px; height: 45px; position: relative; display: flex; justify-content: center; align-items: center; }
+        .g-petal { position: absolute; width: 8px; height: 45px; background: #ff7043; border-radius: 8px; }
+        .g-center { width: 14px; height: 14px; background: #5d4037; border-radius: 50%; z-index: 5; border: 2px solid #ffeb3b; }
+        .margarita { width: 38px; height: 38px; position: relative; display: flex; justify-content: center; align-items: center; }
+        .m-petal { position: absolute; width: 8px; height: 38px; background: #ffffff; border-radius: 8px; box-shadow: 0 0 3px rgba(0,0,0,0.1); }
+        .m-center { width: 13px; height: 13px; background: #ffca28; border-radius: 50%; z-index: 5; }
+        .magic-garden.grow .stem { transform: scaleY(1); } .magic-garden.grow .flower-head { transform: scale(1); opacity: 1; } .magic-garden.grow .leaf { transform: scale(1); }
+
+        .contenedor-letra { text-align: center; margin-top: 10px; height: 40px; display: flex; align-items: center; justify-content: center; }
+        #lineaLetra { font-size: 15px; color: #d15688; font-weight: bold; transition: opacity 0.3s ease; opacity: 0; }
+        #lineaLetra.visible { opacity: 1; }
+
+        /* =========================================
+           ADAPTACIÓN MÓVIL (VERTICAL)
+        ========================================= */
+        @media screen and (max-width: 900px) {
+            body { align-items: center; padding: 20px 10px; }
+            .scale-wrapper { width: 100%; max-width: 420px; padding: 0; margin: 0; }
+            .book-container { perspective: none; }
+            .book { width: 100%; height: auto; min-height: 580px; transform: none !important; display: flex; align-items: center; justify-content: center; }
+            
+            .paper { position: relative; width: 100%; height: auto; min-height: 580px; transform: none !important; display: none; box-shadow: 0 10px 30px rgba(0,0,0,0.08); border-radius: 20px; }
+            .paper.active-mobile { display: flex !important; }
+            
+            .front, .back { position: relative; transform: none !important; width: 100%; height: 100%; border-radius: 20px; border: none !important; backface-visibility: visible; padding: 30px 25px; }
+            .front::before, .back::before { display: none; }
+            
+            .nav-buttons { position: relative; bottom: auto; left: auto; transform: none; margin-top: 25px; justify-content: center; opacity: 1 !important; pointer-events: all !important; width: 100%; }
         }
-
-        /* Pasto Verde */
-        .magic-garden::after {
-            content: '';
-            position: absolute;
-            bottom: 0; left: -10%;
-            width: 120%; height: 35px;
-            background: #7cb342;
-            border-radius: 50% 50% 0 0;
-            z-index: 5;
-            box-shadow: inset 0 5px 10px rgba(255,255,255,0.2);
-        }
-
-        /* Animación del viento */
-        .flower { 
-            position: relative; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; 
-            transform-origin: bottom center; 
-            animation: sway 3s ease-in-out infinite alternate;
-            z-index: 4; /* Delante del pasto pero detrás de la flor */
-        }
-        @keyframes sway {
-            0% { transform: rotate(-5deg); }
-            100% { transform: rotate(5deg); }
-        }
-        
-        /* Retrasos para que no se muevan todas al mismo tiempo con el viento */
-        .f1 { animation-delay: 0s; }
-        .f2 { animation-delay: -1s; }
-        .f3 { animation-delay: -2s; }
-        .f4 { animation-delay: -1.5s; }
-        .f5 { animation-delay: -0.5s; }
-
-        .stem { width: 5px; background: #689f38; border-radius: 3px; transform-origin: bottom; transform: scaleY(0); transition: transform 1.2s ease-in-out; }
-        
-        /* Alturas de cada flor y retraso de crecimiento */
-        .f4 .stem { height: 70px; transition-delay: 0.2s; } /* Margarita */
-        .f1 .stem { height: 110px; transition-delay: 0.4s; } /* Clavel */
-        .f2 .stem { height: 150px; transition-delay: 0.6s; } /* Tulip Rosado */
-        .f3 .stem { height: 120px; transition-delay: 0.8s; } /* Gerbera */
-        .f5 .stem { height: 90px; transition-delay: 1.0s; } /* Tulip Amarillo */
-
-        .flower-head { position: absolute; bottom: 100%; margin-bottom: -5px; transform: scale(0); opacity: 0; transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.8s; z-index: 2; }
-        
-        .f4 .flower-head { transition-delay: 1.0s; }
-        .f1 .flower-head { transition-delay: 1.2s; }
-        .f2 .flower-head { transition-delay: 1.4s; }
-        .f3 .flower-head { transition-delay: 1.6s; }
-        .f5 .flower-head { transition-delay: 1.8s; }
-
-        .leaf { position: absolute; width: 20px; height: 10px; background: #689f38; border-radius: 15px 0 15px 0; bottom: 20px; transform: scale(0); transition: transform 0.8s; }
-        .leaf-left { left: -15px; transform-origin: right bottom; transition-delay: 1s; }
-        .leaf-right { right: -15px; border-radius: 0 15px 0 15px; transform-origin: left bottom; transition-delay: 1.3s; }
-
-        /* Clavel */
-        .clavel { width: 45px; height: 35px; background: #c9a7ef; border-radius: 50px 50px 10px 10px; box-shadow: inset 0 -5px 0 #b085e6; clip-path: polygon(0% 10%, 15% 0%, 30% 15%, 45% 0%, 60% 15%, 75% 0%, 90% 15%, 100% 0%, 100% 100%, 0% 100%); }
-        
-        /* Tulipanes */
-        .tulip { width: 35px; height: 45px; position: relative; }
-        .tulip .petal { position: absolute; bottom: 0; width: 100%; height: 100%; border-radius: 50px 50px 10px 10px; }
-        .tulip .center { background: #f48fb1; z-index: 2; }
-        .tulip .left { background: #f06292; transform: rotate(-15deg); transform-origin: bottom left; z-index: 1; left: -8px;}
-        .tulip .right { background: #f06292; transform: rotate(15deg); transform-origin: bottom right; z-index: 1; right: -8px;}
-        
-        /* Tulipán Amarillo */
-        .tulip-yellow .center { background: #fff59d; }
-        .tulip-yellow .left, .tulip-yellow .right { background: #fbc02d; }
-        
-        /* Gerbera */
-        .gerbera { width: 55px; height: 55px; position: relative; display: flex; justify-content: center; align-items: center; }
-        .g-petal { position: absolute; width: 10px; height: 55px; background: #ff7043; border-radius: 10px; }
-        .g-center { width: 18px; height: 18px; background: #5d4037; border-radius: 50%; z-index: 5; border: 2px solid #ffeb3b; }
-        
-        /* Margarita */
-        .margarita { width: 45px; height: 45px; position: relative; display: flex; justify-content: center; align-items: center; }
-        .m-petal { position: absolute; width: 10px; height: 45px; background: #ffffff; border-radius: 10px; box-shadow: 0 0 3px rgba(0,0,0,0.1); }
-        .m-center { width: 16px; height: 16px; background: #ffca28; border-radius: 50%; z-index: 5; }
-
-        /* Activar el crecimiento */
-        .magic-garden.grow .stem { transform: scaleY(1); }
-        .magic-garden.grow .flower-head { transform: scale(1); opacity: 1; }
-        .magic-garden.grow .leaf { transform: scale(1); }
-
-        /* =========================
-           LETRA DE CANCIÓN ESTILO KARAOKE
-        ========================= */
-        .contenedor-letra { text-align: center; margin-top: 15px; height: 50px; display: flex; align-items: center; justify-content: center; }
-        #lineaLetra { font-size: 16px; color: #d15688; font-family: 'DM Sans', sans-serif; font-weight: bold; transition: opacity 0.3s ease, transform 0.3s ease; opacity: 0; transform: translateY(10px); }
-        #lineaLetra.visible { opacity: 1; transform: translateY(0); }
-
     </style>
 </head>
 <body>
-
-<div id="rotate-message">
-    <div class="phone-icon">📱</div>
-    <h2>Gira tu celular</h2>
-    <p>Para ver tu sorpresa mucho más bonito, por favor acuesta tu teléfono (ponlo en modo horizontal). ✨</p>
-</div>
 
 <div class="scale-wrapper">
     <div class="book-container">
         
         <div class="book" id="book">
             
-            <!-- HOJA 1 -->
-            <div class="paper" id="p1" style="z-index: 6;">
-                <div class="front portada" onclick="goNextPage()">
+            <!-- PÁGINA 1: PORTADA -->
+            <div class="paper active-mobile" id="m0" style="z-index: 7;">
+                <div class="front portada" onclick="nextMobilePage()">
                     <h1>6 Meses<br>Contigo</h1>
-                    <p>Haz clic para abrir 🔐</p>
+                    <p>Toca para abrir 🔐</p>
                 </div>
-                <div class="back" onclick="goPrevPage()">
+            </div>
+
+            <!-- PÁGINA 2: HISTORIA -->
+            <div class="paper" id="m1" style="z-index: 6;">
+                <div class="front">
                     <div class="page-num left">Pág. 1</div>
                     <h2>Nuestra Historia</h2>
                     <p class="subtitle">12 de Marzo de 2026</p>
-                    <div class="carta-texto" style="margin-top: 20px;">
+                    <div class="carta-texto" style="margin-top: 15px;">
                         Mi amor, <br><br>
                         Abrir este cuaderno es como abrir mi corazón. Desde aquel día en que decidimos empezar esta aventura juntos, mis días tienen un color distinto. <br><br>
                         Gracias por ser mi lugar seguro, por tus ocurrencias que me hacen reír a carcajadas y por el equipo tan hermoso que formamos. Eres una mujer fuerte, una mamá de admirar y la persona con la que siempre quiero estar.
@@ -226,17 +162,17 @@
                 </div>
             </div>
 
-            <!-- HOJA 2 -->
-            <div class="paper" id="p2" style="z-index: 5;">
-                <div class="front" onclick="goNextPage()">
-                    <div class="page-num right">Pág. 2</div>
+            <!-- PÁGINA 3: CÁPSULA -->
+            <div class="paper" id="m2" style="z-index: 5;">
+                <div class="front">
+                    <div class="page-num left">Pág. 2</div>
                     <h2>Cápsula del Tiempo</h2>
-                    <p class="subtitle" style="text-align:left; margin-bottom:15px;">Déjame un mensaje para el futuro.</p>
+                    <p class="subtitle" style="text-align:left; margin-bottom:10px;">Déjame un mensaje para el futuro.</p>
                     <div class="form-grid">
                         <div class="form-group"><label>De:</label><input type="text" value="Mi amor" readonly></div>
                         <div class="form-group"><label>Fecha especial:</label><input type="text" value="12/03/2026" readonly></div>
-                        <div class="form-group"><label>Nivel de amor:</label><select><option>Al infinito</option><option>Muchísimo</option></select></div>
-                        <div class="form-group"><label>Beso favorito:</label><select><option>Tiernos</option><option>Robados</option></select></div>
+                        <div class="form-group"><label>Nivel de amor:</label><select><option>Al infinito</option></select></div>
+                        <div class="form-group"><label>Beso favorito:</label><select><option>Tiernos</option></select></div>
                     </div>
                     <div class="radio-group">
                         ¿Cuánto me extrañas cuando no estoy?
@@ -246,33 +182,41 @@
                             <label><input type="radio" name="extra" checked disabled> Demasiado</label>
                         </div>
                     </div>
-                    <button class="btn-guardar" onclick="event.stopPropagation(); alert('¡Recuerdo guardado con todo mi amor! 💕')">Guardar Recuerdo</button>
+                    <button class="btn-guardar" onclick="alert('¡Recuerdo guardado con todo mi amor! 💕')">Guardar Recuerdo</button>
                 </div>
-                <div class="back" onclick="goPrevPage()">
+            </div>
+
+            <!-- PÁGINA 4: GALERÍA -->
+            <div class="paper" id="m3" style="z-index: 4;">
+                <div class="front">
                     <div class="page-num left">Pág. 3</div>
                     <h2>Galería de Recuerdos</h2>
                     <p class="subtitle">Nuestros momentos favoritos.</p>
                     <div class="polaroid-grid">
                         <div class="polaroid"><img src="foto1.jpg" alt="Foto">Mi favorita ❤️</div>
                         <div class="polaroid"><img src="foto2.jpg" alt="Foto">Nosotros ✨</div>
-                        <div class="polaroid" style="grid-column: span 2; width: 65%; margin: auto;"><img src="foto3.jpg" alt="Foto">Siempre 🤍</div>
+                        <div class="polaroid" style="grid-column: span 2; width: 60%; margin: auto;"><img src="foto3.jpg" alt="Foto">Siempre 🤍</div>
                     </div>
                 </div>
             </div>
 
-            <!-- HOJA 3 -->
-            <div class="paper" id="p3" style="z-index: 4;">
-                <div class="front" onclick="goNextPage()">
-                    <div class="page-num right">Pág. 4</div>
+            <!-- PÁGINA 5: MAPA ESTELAR -->
+            <div class="paper" id="m4" style="z-index: 3;">
+                <div class="front">
+                    <div class="page-num left">Pág. 4</div>
                     <h2>Bajo el mismo cielo</h2>
                     <p class="subtitle">El mapa de nuestro inicio</p>
-                    <div class="carta-texto" style="text-align: center;">
+                    <div class="carta-texto" style="text-align: center; font-size: 14px;">
                         Nunca me cansaré de mirar cómo estaban las estrellas aquel 12 de marzo. El universo se acomodó perfecto para nosotros.
                     </div>
-                    <img src="mapa.jpg" class="flor-img" style="border-radius: 50%; height: 250px; width: 250px; margin: 30px auto; display: block; border: 4px solid #f58ab5;">
-                    <p style="text-align: center; font-family: 'Pacifico'; color: #d15688; font-size: 18px;">Mi estrella favorita siempre serás tú.</p>
+                    <img src="mapa.jpg" class="flor-img" style="border-radius: 50%; height: 180px; width: 180px; margin: 15px auto; display: block; border: 4px solid #f58ab5;">
+                    <p style="text-align: center; font-family: 'Pacifico'; color: #d15688; font-size: 16px;">Mi estrella favorita siempre serás tú.</p>
                 </div>
-                <div class="back" onclick="goPrevPage()">
+            </div>
+
+            <!-- PÁGINA 6: POEMA -->
+            <div class="paper" id="m5" style="z-index: 2;">
+                <div class="front">
                     <div class="page-num left">Pág. 5</div>
                     <h2>Letras para ti</h2>
                     <div class="poema">
@@ -281,90 +225,36 @@
                         Sabes lo que yo ignoro<br>
                         y me dices las cosas que no me digo."<br>
                         <br>
-                        <span style="font-size: 16px; color: #b391a3; font-family: 'DM Sans';">- Jaime Sabines</span>
-                    </div>
-                    <div class="carta-texto" style="margin-top: 40px; text-align: center;">
-                        Para que nunca falte un poema dedicado a la mujer que me roba los suspiros.
+                        <span style="font-size: 14px; color: #b391a3; font-family: 'DM Sans';">- Jaime Sabines</span>
                     </div>
                 </div>
             </div>
 
-            <!-- HOJA 4 -->
-            <div class="paper" id="p4" style="z-index: 3;">
-                <div class="front" onclick="goNextPage()">
-                    <div class="page-num right">Pág. 6</div>
+            <!-- PÁGINA 7: JARDÍN DE FLORES -->
+            <div class="paper" id="m6" style="z-index: 1;">
+                <div class="front">
+                    <div class="page-num left">Pág. 6</div>
                     <h2>Tus favoritas</h2>
-                    <div class="carta-texto" style="margin-top: 15px;">
-                        Como las flores reales no duran para siempre, aquí te dejo un jardín con tus favoritas que florecerá cada vez que abras esta página.
+                    <div class="carta-texto" style="margin-top: 10px; font-size: 14px;">
+                        Como las flores reales no duran para siempre, aquí te dejo un jardín con tus favoritas que florecerá para ti.
                     </div>
                     
-                    <!-- JARDÍN ANIMADO CON PASTO Y VIENTO -->
-                    <div class="magic-garden" id="jardin">
-                        
-                        <!-- Margarita -->
-                        <div class="flower f4">
-                            <div class="flower-head margarita">
-                                <div class="m-petal" style="transform: rotate(0deg)"></div>
-                                <div class="m-petal" style="transform: rotate(45deg)"></div>
-                                <div class="m-petal" style="transform: rotate(90deg)"></div>
-                                <div class="m-petal" style="transform: rotate(135deg)"></div>
-                                <div class="m-center"></div>
-                            </div>
-                            <div class="leaf leaf-left"></div>
-                            <div class="stem"></div>
-                        </div>
-                        
-                        <!-- Clavel Lila -->
-                        <div class="flower f1">
-                            <div class="flower-head clavel"></div>
-                            <div class="leaf leaf-right"></div>
-                            <div class="stem"></div>
-                        </div>
-                        
-                        <!-- Tulipán Rosado -->
-                        <div class="flower f2">
-                            <div class="flower-head tulip">
-                                <div class="petal left"></div>
-                                <div class="petal right"></div>
-                                <div class="petal center"></div>
-                            </div>
-                            <div class="leaf leaf-left"></div>
-                            <div class="stem"></div>
-                        </div>
-                        
-                        <!-- Gerbera Naranja -->
-                        <div class="flower f3">
-                            <div class="flower-head gerbera">
-                                <div class="g-petal" style="transform: rotate(0deg)"></div>
-                                <div class="g-petal" style="transform: rotate(30deg)"></div>
-                                <div class="g-petal" style="transform: rotate(60deg)"></div>
-                                <div class="g-petal" style="transform: rotate(90deg)"></div>
-                                <div class="g-petal" style="transform: rotate(120deg)"></div>
-                                <div class="g-petal" style="transform: rotate(150deg)"></div>
-                                <div class="g-center"></div>
-                            </div>
-                            <div class="leaf leaf-right"></div>
-                            <div class="stem"></div>
-                        </div>
-                        
-                        <!-- Tulipán Amarillo -->
-                        <div class="flower f5">
-                            <div class="flower-head tulip tulip-yellow">
-                                <div class="petal left"></div>
-                                <div class="petal right"></div>
-                                <div class="petal center"></div>
-                            </div>
-                            <div class="leaf leaf-left"></div>
-                            <div class="stem"></div>
-                        </div>
-
+                    <div class="magic-garden grow" id="jardinMobile">
+                        <div class="flower f4"><div class="flower-head margarita"><div class="m-petal" style="transform: rotate(0deg)"></div><div class="m-petal" style="transform: rotate(45deg)"></div><div class="m-petal" style="transform: rotate(90deg)"></div><div class="m-petal" style="transform: rotate(135deg)"></div><div class="m-center"></div></div><div class="leaf leaf-left"></div><div class="stem" style="transform: scaleY(1)"></div></div>
+                        <div class="flower f1"><div class="flower-head clavel"></div><div class="leaf leaf-right"></div><div class="stem" style="transform: scaleY(1)"></div></div>
+                        <div class="flower f2"><div class="flower-head tulip"><div class="petal left"></div><div class="petal right"></div><div class="petal center"></div></div><div class="leaf leaf-left"></div><div class="stem" style="transform: scaleY(1)"></div></div>
+                        <div class="flower f3"><div class="flower-head gerbera"><div class="g-petal" style="transform: rotate(0deg)"></div><div class="g-petal" style="transform: rotate(30deg)"></div><div class="g-petal" style="transform: rotate(60deg)"></div><div class="g-petal" style="transform: rotate(90deg)"></div><div class="g-petal" style="transform: rotate(120deg)"></div><div class="g-petal" style="transform: rotate(150deg)"></div><div class="g-center"></div></div><div class="leaf leaf-right"></div><div class="stem" style="transform: scaleY(1)"></div></div>
+                        <div class="flower f5"><div class="flower-head tulip tulip-yellow"><div class="petal left"></div><div class="petal right"></div><div class="petal center"></div></div><div class="leaf leaf-left"></div><div class="stem" style="transform: scaleY(1)"></div></div>
                     </div>
-
                 </div>
-                <div class="back" onclick="goPrevPage()">
+            </div>
+
+            <!-- PÁGINA 8: COSAS QUE AMO -->
+            <div class="paper" id="m7">
+                <div class="front">
                     <div class="page-num left">Pág. 7</div>
                     <h2>Cosas que amo de ti</h2>
-                    <ul class="carta-texto" style="margin-left: 25px; margin-top:30px; line-height: 2.2; font-size: 17px;">
+                    <ul class="carta-texto" style="margin-left: 20px; margin-top:20px; line-height: 2; font-size: 15px;">
                         <li>La forma en la que me miras.</li>
                         <li>Tus ocurrencias que me hacen reír.</li>
                         <li>El amor infinito que le das a tu pequeño.</li>
@@ -375,62 +265,56 @@
                 </div>
             </div>
 
-            <!-- HOJA 5 -->
-            <div class="paper" id="p5" style="z-index: 2;">
-                <div class="front" onclick="goNextPage()">
-                    <div class="page-num right">Pág. 8</div>
+            <!-- PÁGINA 9: VALE -->
+            <div class="paper" id="m8">
+                <div class="front">
+                    <div class="page-num left">Pág. 8</div>
                     <h2>Solo para ti</h2>
                     <p class="subtitle">Porque te mereces el mundo entero.</p>
-                    
                     <div class="vale-descanso">
                         <h3>Vale Especial 🎟️</h3>
-                        <p>Válido para canjear por: <br><span style="color: #c92a62; font-size: 20px;">Toda una vida junto a tí.</span></p>
+                        <p>Válido para canjear por: <br><span style="color: #c92a62; font-size: 18px;">Toda una vida junto a tí.</span></p>
                         <br>
-                        <p style="font-weight: normal; font-size: 14px;">Condiciones de uso:<br>Una vez canjeado no habra marcha atras, y por cierto tambien viene incluido invitación a un almuerzo</p>
+                        <p style="font-weight: normal; font-size: 13px;">Condiciones de uso:<br>Una vez canjeado no habrá marcha atrás, y por cierto también incluye invitación a un almuerzo.</p>
                     </div>
                 </div>
-                <div class="back" onclick="goPrevPage()">
+            </div>
+
+            <!-- PÁGINA 10: CANCIÓN -->
+            <div class="paper" id="m9">
+                <div class="front">
                     <div class="page-num left">Pág. 9</div>
                     <h2>Nuestra Canción 🎵</h2>
-                    <p class="subtitle" style="margin-bottom: 25px;">Ponle play a nuestra historia.</p>
-                    
-                    <img src="portada-cancion.jpg" style="width: 170px; height: 170px; border-radius: 15px; object-fit: cover; display: block; margin: 0 auto 20px auto; box-shadow: 0 10px 20px rgba(0,0,0,0.1);">
-                    
-                    <!-- REPRODUCTOR DE AUDIO -->
+                    <p class="subtitle" style="margin-bottom: 15px;">Ponle play a nuestra historia.</p>
+                    <img src="portada-cancion.jpg" style="width: 130px; height: 130px; border-radius: 15px; object-fit: cover; display: block; margin: 0 auto 15px auto; box-shadow: 0 10px 20px rgba(0,0,0,0.1);">
                     <audio id="miAudio" controls style="width: 100%; height: 40px;">
                         <source src="cancion.mp3" type="audio/mpeg">
                     </audio>
-
-                    <!-- CONTENEDOR DE LA LETRA (KARAOKE) -->
                     <div class="contenedor-letra">
                         <p id="lineaLetra" class="visible">Ponle play a nuestra historia... 🤍</p>
                     </div>
                 </div>
             </div>
 
-            <!-- HOJA 6 -->
-            <div class="paper" id="p6" style="z-index: 1;">
-                <div class="front" onclick="goNextPage()">
-                    <div class="page-num right">Pág. 10</div>
-                    <h2 style="margin-top: 100px;">El final de este capítulo...</h2>
-                    <div class="carta-texto" style="text-align: center; margin-top: 30px; font-size: 20px;">
+            <!-- PÁGINA 11: FINAL -->
+            <div class="paper" id="m10">
+                <div class="front portada">
+                    <div class="page-num left" style="color:white;">Pág. 10</div>
+                    <h2 style="color:white; margin-top: 40px;">El final de este capítulo...</h2>
+                    <div class="carta-texto" style="text-align: center; margin-top: 20px; font-size: 16px; color:white;">
                         Pero apenas el comienzo de muchísimos más a tu lado. <br><br>
                         Gracias por estos 6 meses tan hermosos. Te volvería a elegir una y mil veces más.
                     </div>
-                    <div style="text-align: center; font-size: 50px; margin-top: 40px;">♾️❤️</div>
-                </div>
-                <div class="back portada" style="transform: rotateY(180deg);" onclick="goPrevPage()">
-                    <h1 style="font-size: 70px;">Te Amo</h1>
-                    <p style="color: white; font-size:22px;">Felices 6 Meses 🤍</p>
+                    <div style="text-align: center; font-size: 40px; margin-top: 20px;">♾️❤️</div>
                 </div>
             </div>
 
         </div>
 
-        <!-- Botones de navegación -->
-        <div class="nav-buttons" id="nav-buttons">
-            <button class="nav-btn" onclick="goPrevPage()">◄ Anterior</button>
-            <button class="nav-btn" onclick="goNextPage()">Siguiente ►</button>
+        <!-- Botones de navegación universal -->
+        <div class="nav-buttons show" id="nav-buttons">
+            <button class="nav-btn" onclick="prevPage()">◄ Anterior</button>
+            <button class="nav-btn" onclick="nextPage()">Siguiente ►</button>
         </div>
 
     </div>
@@ -454,75 +338,65 @@
     setInterval(createHeart, 400);
 
     /* ==================================
-       LÓGICA DEL CUADERNO Y JARDÍN
+       CONTROL DE PÁGINAS (HÍBRIDO PC / MÓVIL)
     ================================== */
     const papers = [
-        document.querySelector("#p1"),
-        document.querySelector("#p2"),
-        document.querySelector("#p3"),
-        document.querySelector("#p4"),
-        document.querySelector("#p5"),
-        document.querySelector("#p6")
+        document.querySelector("#m1"), document.querySelector("#m2"), document.querySelector("#m3"),
+        document.querySelector("#m4"), document.querySelector("#m5"), document.querySelector("#m6")
     ];
-    
     const book = document.querySelector("#book");
-    const navButtons = document.querySelector("#nav-buttons");
+    let pcLocation = 1;
 
-    let currentLocation = 1;
-    let numOfPapers = papers.length;
-    let maxLocation = numOfPapers + 1;
+    const mobilePages = [
+        document.querySelector("#m0"), document.querySelector("#m1"), document.querySelector("#m2"),
+        document.querySelector("#m3"), document.querySelector("#m4"), document.querySelector("#m5"),
+        document.querySelector("#m6"), document.querySelector("#m7"), document.querySelector("#m8"),
+        document.querySelector("#m9"), document.querySelector("#m10")
+    ];
+    let mobileIndex = 0;
 
-    function openBook() {
-        book.classList.add("open");
-        book.classList.remove("closed-end");
-        setTimeout(() => navButtons.classList.add("show"), 400);
-    }
-
-    function closeBook(isAtBeginning) {
-        if(isAtBeginning) {
-            book.classList.remove("open");
+    function nextPage() {
+        if (window.innerWidth <= 900) {
+            if (mobileIndex < mobilePages.length - 1) {
+                mobilePages[mobileIndex].classList.remove('active-mobile');
+                mobileIndex++;
+                mobilePages[mobileIndex].classList.add('active-mobile');
+            }
         } else {
-            book.classList.remove("open");
-            book.classList.add("closed-end");
-        }
-        navButtons.classList.remove("show");
-    }
-
-    function goNextPage() {
-        if(currentLocation < maxLocation) {
-            if(currentLocation === 1) openBook();
-            
-            const paper = papers[currentLocation - 1];
-            paper.classList.add("flipped");
-            paper.style.zIndex = currentLocation;
-            
-            /* Flores crecen al abrir la página 4 */
-            if(currentLocation === 3) {
-                setTimeout(() => document.getElementById('jardin').classList.add('grow'), 400);
+            if (pcLocation <= papers.length) {
+                if (pcLocation === 1) book.classList.add("open");
+                papers[pcLocation - 1].classList.add("flipped");
+                papers[pcLocation - 1].style.zIndex = pcLocation;
+                if (pcLocation === papers.length) {
+                    book.classList.remove("open");
+                    book.classList.add("closed-end");
+                }
+                pcLocation++;
             }
-
-            if(currentLocation === numOfPapers) closeBook(false);
-            currentLocation++;
         }
     }
 
-    function goPrevPage() {
-        if(currentLocation > 1) {
-            if(currentLocation === 2) closeBook(true);
-            
-            currentLocation--;
-            const paper = papers[currentLocation - 1];
-            paper.classList.remove("flipped");
-            
-            paper.style.zIndex = numOfPapers - currentLocation + 1;
-            
-            /* Flores se esconden si se regresa a la página anterior */
-            if(currentLocation === 3) {
-                document.getElementById('jardin').classList.remove('grow');
+    function prevPage() {
+        if (window.innerWidth <= 900) {
+            if (mobileIndex > 0) {
+                mobilePages[mobileIndex].classList.remove('active-mobile');
+                mobileIndex--;
+                mobilePages[mobileIndex].classList.add('active-mobile');
             }
-
-            if(currentLocation === numOfPapers) openBook();
+        } else {
+            if (pcLocation > 1) {
+                if (pcLocation === 2) book.classList.remove("open");
+                pcLocation--;
+                papers[pcLocation - 1].classList.remove("flipped");
+                papers[pcLocation - 1].style.zIndex = papers.length - pcLocation + 1;
+                if (pcLocation === papers.length) book.classList.add("open");
+                book.classList.remove("closed-end");
+            }
         }
+    }
+
+    function nextMobilePage() {
+        if (window.innerWidth <= 900) nextPage();
     }
 
     /* ==================================
@@ -532,7 +406,6 @@
         const audio = document.getElementById('miAudio');
         const lineaLetra = document.getElementById('lineaLetra');
 
-        // Tiempos exactos para "Abrázame" de Ángela Aguilar & Felipe Botello
         const letrasSincronizadas = [
             { time: 0, text: "Ponle play a nuestra historia... 🤍" },
             { time: 7, text: "Me he preguntado..." },
@@ -576,24 +449,26 @@
             { time: 190, text: "Te amo ✨" }
         ];
 
-        audio.addEventListener('timeupdate', () => {
-            const tiempoActual = audio.currentTime;
-            let textoActual = letrasSincronizadas[0].text;
-            
-            for (let i = 0; i < letrasSincronizadas.length; i++) {
-                if (tiempoActual >= letrasSincronizadas[i].time) {
-                    textoActual = letrasSincronizadas[i].text;
+        if(audio) {
+            audio.addEventListener('timeupdate', () => {
+                const tiempoActual = audio.currentTime;
+                let textoActual = letrasSincronizadas[0].text;
+                
+                for (let i = 0; i < letrasSincronizadas.length; i++) {
+                    if (tiempoActual >= letrasSincronizadas[i].time) {
+                        textoActual = letrasSincronizadas[i].text;
+                    }
                 }
-            }
 
-            if (lineaLetra.innerText !== textoActual) {
-                lineaLetra.classList.remove('visible');
-                setTimeout(() => {
-                    lineaLetra.innerText = textoActual;
-                    lineaLetra.classList.add('visible');
-                }, 300);
-            }
-        });
+                if (lineaLetra && lineaLetra.innerText !== textoActual) {
+                    lineaLetra.classList.remove('visible');
+                    setTimeout(() => {
+                        lineaLetra.innerText = textoActual;
+                        lineaLetra.classList.add('visible');
+                    }, 300);
+                }
+            });
+        }
     });
 </script>
 
