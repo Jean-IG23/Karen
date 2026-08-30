@@ -29,14 +29,48 @@
         .scale-wrapper { transform: scale(1); transition: transform 0.3s; z-index: 10; margin: auto; padding: 40px 0; }
         @media (max-width: 1050px) { .scale-wrapper { transform: scale(0.85); } }
 
-        .book-container { display: flex; justify-content: center; align-items: center; perspective: 2000px; }
-        .book { position: relative; width: 450px; height: 600px; transition: transform 0.6s cubic-bezier(0.645, 0.045, 0.355, 1); transform: translateX(0); }
-        .book.open { transform: translateX(225px); }
-        .book.closed-end { transform: translateX(450px); }
+        .book-container { display: flex; justify-content: center; align-items: center; perspective: 2500px; }
+        
+        .book {
+            position: relative;
+            width: 450px;
+            height: 600px;
+            transform-style: preserve-3d;
+            transition: transform 0.8s cubic-bezier(0.645, 0.045, 0.355, 1);
+        }
 
-        .paper { position: absolute; width: 100%; height: 100%; top: 0; left: 0; perspective: 2000px; transform-style: preserve-3d; transition: transform 0.8s cubic-bezier(0.645, 0.045, 0.355, 1), z-index 0.8s; transform-origin: left center; cursor: pointer; }
-        .paper.flipped { transform: rotateY(-180deg); }
-        .front, .back { position: absolute; width: 100%; height: 100%; backface-visibility: hidden; background-color: #fffafc; padding: 40px 35px; box-shadow: inset 0 0 20px rgba(0,0,0,0.03); display: flex; flex-direction: column; overflow: hidden; }
+        .paper {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            perspective: 2000px;
+            transform-style: preserve-3d;
+            transition: transform 0.9s cubic-bezier(0.645, 0.045, 0.355, 1);
+            transform-origin: left center;
+            cursor: pointer;
+        }
+
+        .paper.flipped {
+            transform: rotateY(-180deg);
+        }
+
+        .front, .back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            backface-visibility: hidden;
+            background-color: #fffafc;
+            padding: 40px 35px;
+            box-shadow: inset 0 0 20px rgba(0,0,0,0.03);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
         .front { border-radius: 5px 15px 15px 5px; border-left: 2px solid #e8cddb; transform: rotateY(0deg); }
         .back { border-radius: 15px 5px 5px 15px; border-right: 2px solid #e8cddb; transform: rotateY(180deg); }
         .front::before { content: ''; position: absolute; top: 0; left: 0; width: 40px; height: 100%; background: linear-gradient(to right, rgba(0,0,0,0.08), transparent); }
@@ -140,7 +174,7 @@
         <div class="book" id="book">
             
             <!-- PÁGINA 1: PORTADA -->
-            <div class="paper active-mobile" id="m0" style="z-index: 7;">
+            <div class="paper active-mobile" id="m0" style="z-index: 11;">
                 <div class="front portada" onclick="nextMobilePage()">
                     <h1>6 Meses<br>Contigo</h1>
                     <p>Toca para abrir 🔐</p>
@@ -148,7 +182,7 @@
             </div>
 
             <!-- PÁGINA 2: HISTORIA -->
-            <div class="paper" id="m1" style="z-index: 6;">
+            <div class="paper" id="m1" style="z-index: 10;">
                 <div class="front">
                     <div class="page-num left">Pág. 1</div>
                     <h2>Nuestra Historia</h2>
@@ -163,7 +197,7 @@
             </div>
 
             <!-- PÁGINA 3: CÁPSULA -->
-            <div class="paper" id="m2" style="z-index: 5;">
+            <div class="paper" id="m2" style="z-index: 9;">
                 <div class="front">
                     <div class="page-num left">Pág. 2</div>
                     <h2>Cápsula del Tiempo</h2>
@@ -187,7 +221,7 @@
             </div>
 
             <!-- PÁGINA 4: GALERÍA -->
-            <div class="paper" id="m3" style="z-index: 4;">
+            <div class="paper" id="m3" style="z-index: 8;">
                 <div class="front">
                     <div class="page-num left">Pág. 3</div>
                     <h2>Galería de Recuerdos</h2>
@@ -201,7 +235,7 @@
             </div>
 
             <!-- PÁGINA 5: MAPA ESTELAR -->
-            <div class="paper" id="m4" style="z-index: 3;">
+            <div class="paper" id="m4" style="z-index: 7;">
                 <div class="front">
                     <div class="page-num left">Pág. 4</div>
                     <h2>Bajo el mismo cielo</h2>
@@ -215,7 +249,7 @@
             </div>
 
             <!-- PÁGINA 6: POEMA -->
-            <div class="paper" id="m5" style="z-index: 2;">
+            <div class="paper" id="m5" style="z-index: 6;">
                 <div class="front">
                     <div class="page-num left">Pág. 5</div>
                     <h2>Letras para ti</h2>
@@ -231,7 +265,7 @@
             </div>
 
             <!-- PÁGINA 7: JARDÍN DE FLORES -->
-            <div class="paper" id="m6" style="z-index: 1;">
+            <div class="paper" id="m6" style="z-index: 5;">
                 <div class="front">
                     <div class="page-num left">Pág. 6</div>
                     <h2>Tus favoritas</h2>
@@ -250,7 +284,7 @@
             </div>
 
             <!-- PÁGINA 8: COSAS QUE AMO -->
-            <div class="paper" id="m7">
+            <div class="paper" id="m7" style="z-index: 4;">
                 <div class="front">
                     <div class="page-num left">Pág. 7</div>
                     <h2>Cosas que amo de ti</h2>
@@ -266,7 +300,7 @@
             </div>
 
             <!-- PÁGINA 9: VALE -->
-            <div class="paper" id="m8">
+            <div class="paper" id="m8" style="z-index: 3;">
                 <div class="front">
                     <div class="page-num left">Pág. 8</div>
                     <h2>Solo para ti</h2>
@@ -281,7 +315,7 @@
             </div>
 
             <!-- PÁGINA 10: CANCIÓN -->
-            <div class="paper" id="m9">
+            <div class="paper" id="m9" style="z-index: 2;">
                 <div class="front">
                     <div class="page-num left">Pág. 9</div>
                     <h2>Nuestra Canción 🎵</h2>
@@ -297,7 +331,7 @@
             </div>
 
             <!-- PÁGINA 11: FINAL -->
-            <div class="paper" id="m10">
+            <div class="paper" id="m10" style="z-index: 1;">
                 <div class="front portada">
                     <div class="page-num left" style="color:white;">Pág. 10</div>
                     <h2 style="color:white; margin-top: 40px;">El final de este capítulo...</h2>
@@ -322,7 +356,7 @@
 
 <script>
     /* ==================================
-       LLUVIA DE CORAZONES
+        LLUVIA DE CORAZONES
     ================================== */
     function createHeart() {
         const heart = document.createElement('div');
@@ -338,39 +372,38 @@
     setInterval(createHeart, 400);
 
     /* ==================================
-       CONTROL DE PÁGINAS (HÍBRIDO PC / MÓVIL)
+        CONTROL DE PÁGINAS (HÍBRIDO PC / MÓVIL)
     ================================== */
     const papers = [
-        document.querySelector("#m1"), document.querySelector("#m2"), document.querySelector("#m3"),
-        document.querySelector("#m4"), document.querySelector("#m5"), document.querySelector("#m6")
+        document.querySelector("#m0"),
+        document.querySelector("#m1"), 
+        document.querySelector("#m2"), 
+        document.querySelector("#m3"),
+        document.querySelector("#m4"), 
+        document.querySelector("#m5"), 
+        document.querySelector("#m6"),
+        document.querySelector("#m7"),
+        document.querySelector("#m8"),
+        document.querySelector("#m9")
     ];
-    const book = document.querySelector("#book");
-    let pcLocation = 1;
-
-    const mobilePages = [
-        document.querySelector("#m0"), document.querySelector("#m1"), document.querySelector("#m2"),
-        document.querySelector("#m3"), document.querySelector("#m4"), document.querySelector("#m5"),
-        document.querySelector("#m6"), document.querySelector("#m7"), document.querySelector("#m8"),
-        document.querySelector("#m9"), document.querySelector("#m10")
-    ];
+    
+    let pcLocation = 0;
+    const mobilePages = document.querySelectorAll(".paper");
     let mobileIndex = 0;
 
     function nextPage() {
         if (window.innerWidth <= 900) {
+            // LÓGICA MÓVIL (Cambia la visibilidad de bloques verticalmente)
             if (mobileIndex < mobilePages.length - 1) {
                 mobilePages[mobileIndex].classList.remove('active-mobile');
                 mobileIndex++;
                 mobilePages[mobileIndex].classList.add('active-mobile');
             }
         } else {
-            if (pcLocation <= papers.length) {
-                if (pcLocation === 1) book.classList.add("open");
-                papers[pcLocation - 1].classList.add("flipped");
-                papers[pcLocation - 1].style.zIndex = pcLocation;
-                if (pcLocation === papers.length) {
-                    book.classList.remove("open");
-                    book.classList.add("closed-end");
-                }
+            // LÓGICA PC (Rota las páginas tridimensionalmente de forma individual)
+            if (pcLocation < papers.length) {
+                papers[pcLocation].classList.add("flipped");
+                papers[pcLocation].style.zIndex = pcLocation + 1;
                 pcLocation++;
             }
         }
@@ -378,19 +411,18 @@
 
     function prevPage() {
         if (window.innerWidth <= 900) {
+            // LÓGICA MÓVIL
             if (mobileIndex > 0) {
                 mobilePages[mobileIndex].classList.remove('active-mobile');
                 mobileIndex--;
                 mobilePages[mobileIndex].classList.add('active-mobile');
             }
         } else {
-            if (pcLocation > 1) {
-                if (pcLocation === 2) book.classList.remove("open");
+            // LÓGICA PC
+            if (pcLocation > 0) {
                 pcLocation--;
-                papers[pcLocation - 1].classList.remove("flipped");
-                papers[pcLocation - 1].style.zIndex = papers.length - pcLocation + 1;
-                if (pcLocation === papers.length) book.classList.add("open");
-                book.classList.remove("closed-end");
+                papers[pcLocation].classList.remove("flipped");
+                papers[pcLocation].style.zIndex = papers.length - pcLocation + 1;
             }
         }
     }
@@ -400,7 +432,7 @@
     }
 
     /* ==================================
-       LETRA SINCRONIZADA (KARAOKE)
+        LETRA SINCRONIZADA (KARAOKE)
     ================================== */
     document.addEventListener("DOMContentLoaded", () => {
         const audio = document.getElementById('miAudio');
