@@ -49,13 +49,13 @@
             transform-style: preserve-3d;
             transition: transform 0.9s cubic-bezier(0.645, 0.045, 0.355, 1);
             transform-origin: left center;
-            cursor: pointer;
         }
 
         .paper.flipped {
             transform: rotateY(-180deg);
         }
 
+        /* Front es la página derecha, Back es la página izquierda */
         .front, .back {
             position: absolute;
             width: 100%;
@@ -73,6 +73,8 @@
 
         .front { border-radius: 5px 15px 15px 5px; border-left: 2px solid #e8cddb; transform: rotateY(0deg); }
         .back { border-radius: 15px 5px 5px 15px; border-right: 2px solid #e8cddb; transform: rotateY(180deg); }
+        
+        /* Efecto de sombra en el lomo del cuaderno */
         .front::before { content: ''; position: absolute; top: 0; left: 0; width: 40px; height: 100%; background: linear-gradient(to right, rgba(0,0,0,0.08), transparent); }
         .back::before { content: ''; position: absolute; top: 0; right: 0; width: 40px; height: 100%; background: linear-gradient(to left, rgba(0,0,0,0.08), transparent); }
 
@@ -110,8 +112,7 @@
         
         .flor-img { width: 100%; height: 180px; object-fit: cover; border-radius: 15px; margin-top: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.1);}
         
-        .nav-buttons { position: absolute; bottom: -70px; left: 50%; transform: translateX(-50%); display: flex; gap: 20px; opacity: 0; transition: opacity 0.5s; pointer-events: none; }
-        .nav-buttons.show { opacity: 1; pointer-events: all; }
+        .nav-buttons { position: absolute; bottom: -70px; left: 50%; transform: translateX(-50%); display: flex; gap: 20px; opacity: 1; z-index: 100; }
         .nav-btn { background: #d15688; color: #fff; border: none; box-shadow: 0 8px 20px rgba(209, 86, 136, 0.3); padding: 10px 25px; border-radius: 25px; cursor: pointer; font-weight: bold; font-size: 15px; transition: 0.3s; }
         .nav-btn:hover { background: #b04370; transform: translateY(-3px); }
         .page-num { position: absolute; bottom: 15px; font-size: 12px; color: #b391a3; font-weight: bold;}
@@ -154,15 +155,19 @@
             body { align-items: center; padding: 20px 10px; }
             .scale-wrapper { width: 100%; max-width: 420px; padding: 0; margin: 0; }
             .book-container { perspective: none; }
+            
+            /* Anulamos la estructura 3D en móvil y mostramos como tarjetas sueltas */
             .book { width: 100%; height: auto; min-height: 580px; transform: none !important; display: flex; align-items: center; justify-content: center; }
+            .paper { position: relative; display: block; width: 100%; height: auto; z-index: 1 !important; transform: none !important; }
+            .paper.flipped { transform: none !important; }
             
-            .paper { position: relative; width: 100%; height: auto; min-height: 580px; transform: none !important; display: none; box-shadow: 0 10px 30px rgba(0,0,0,0.08); border-radius: 20px; }
-            .paper.active-mobile { display: flex !important; }
+            .mobile-page { display: none; position: relative; width: 100%; height: auto; min-height: 580px; border-radius: 20px; border: none !important; backface-visibility: visible; padding: 30px 25px; box-shadow: 0 10px 30px rgba(0,0,0,0.08); transform: none !important; background-color: #fffafc; }
+            .mobile-page.portada { background: linear-gradient(135deg, #f58ab5, #c9a7ef); }
+            .mobile-page.active-mobile { display: flex !important; }
             
-            .front, .back { position: relative; transform: none !important; width: 100%; height: 100%; border-radius: 20px; border: none !important; backface-visibility: visible; padding: 30px 25px; }
             .front::before, .back::before { display: none; }
             
-            .nav-buttons { position: relative; bottom: auto; left: auto; transform: none; margin-top: 25px; justify-content: center; opacity: 1 !important; pointer-events: all !important; width: 100%; }
+            .nav-buttons { position: relative; bottom: auto; left: auto; transform: none; margin-top: 25px; justify-content: center; width: 100%; }
         }
     </style>
 </head>
@@ -173,17 +178,15 @@
         
         <div class="book" id="book">
             
-            <!-- PÁGINA 1: PORTADA -->
-            <div class="paper active-mobile" id="m0" style="z-index: 11;">
-                <div class="front portada" onclick="nextMobilePage()">
+            <!-- HOJA 1 -->
+            <div class="paper" style="z-index: 6;">
+                <!-- PORTADA (Derecha) -->
+                <div class="front portada mobile-page active-mobile" onclick="nextMobilePage()">
                     <h1>6 Meses<br>Contigo</h1>
                     <p>Toca para abrir 🔐</p>
                 </div>
-            </div>
-
-            <!-- PÁGINA 2: HISTORIA -->
-            <div class="paper" id="m1" style="z-index: 10;">
-                <div class="front">
+                <!-- HISTORIA (Izquierda) -->
+                <div class="back mobile-page">
                     <div class="page-num left">Pág. 1</div>
                     <h2>Nuestra Historia</h2>
                     <p class="subtitle">12 de Marzo de 2026</p>
@@ -196,10 +199,11 @@
                 </div>
             </div>
 
-            <!-- PÁGINA 3: CÁPSULA -->
-            <div class="paper" id="m2" style="z-index: 9;">
-                <div class="front">
-                    <div class="page-num left">Pág. 2</div>
+            <!-- HOJA 2 -->
+            <div class="paper" style="z-index: 5;">
+                <!-- CÁPSULA (Derecha) -->
+                <div class="front mobile-page">
+                    <div class="page-num right">Pág. 2</div>
                     <h2>Cápsula del Tiempo</h2>
                     <p class="subtitle" style="text-align:left; margin-bottom:10px;">Déjame un mensaje para el futuro.</p>
                     <div class="form-grid">
@@ -218,11 +222,8 @@
                     </div>
                     <button class="btn-guardar" onclick="alert('¡Recuerdo guardado con todo mi amor! 💕')">Guardar Recuerdo</button>
                 </div>
-            </div>
-
-            <!-- PÁGINA 4: GALERÍA -->
-            <div class="paper" id="m3" style="z-index: 8;">
-                <div class="front">
+                <!-- GALERÍA (Izquierda) -->
+                <div class="back mobile-page">
                     <div class="page-num left">Pág. 3</div>
                     <h2>Galería de Recuerdos</h2>
                     <p class="subtitle">Nuestros momentos favoritos.</p>
@@ -234,10 +235,11 @@
                 </div>
             </div>
 
-            <!-- PÁGINA 5: MAPA ESTELAR -->
-            <div class="paper" id="m4" style="z-index: 7;">
-                <div class="front">
-                    <div class="page-num left">Pág. 4</div>
+            <!-- HOJA 3 -->
+            <div class="paper" style="z-index: 4;">
+                <!-- MAPA ESTELAR (Derecha) -->
+                <div class="front mobile-page">
+                    <div class="page-num right">Pág. 4</div>
                     <h2>Bajo el mismo cielo</h2>
                     <p class="subtitle">El mapa de nuestro inicio</p>
                     <div class="carta-texto" style="text-align: center; font-size: 14px;">
@@ -246,11 +248,8 @@
                     <img src="mapa.jpg" class="flor-img" style="border-radius: 50%; height: 180px; width: 180px; margin: 15px auto; display: block; border: 4px solid #f58ab5;">
                     <p style="text-align: center; font-family: 'Pacifico'; color: #d15688; font-size: 16px;">Mi estrella favorita siempre serás tú.</p>
                 </div>
-            </div>
-
-            <!-- PÁGINA 6: POEMA -->
-            <div class="paper" id="m5" style="z-index: 6;">
-                <div class="front">
+                <!-- POEMA (Izquierda) -->
+                <div class="back mobile-page">
                     <div class="page-num left">Pág. 5</div>
                     <h2>Letras para ti</h2>
                     <div class="poema">
@@ -264,10 +263,11 @@
                 </div>
             </div>
 
-            <!-- PÁGINA 7: JARDÍN DE FLORES -->
-            <div class="paper" id="m6" style="z-index: 5;">
-                <div class="front">
-                    <div class="page-num left">Pág. 6</div>
+            <!-- HOJA 4 -->
+            <div class="paper" style="z-index: 3;">
+                <!-- JARDÍN (Derecha) -->
+                <div class="front mobile-page">
+                    <div class="page-num right">Pág. 6</div>
                     <h2>Tus favoritas</h2>
                     <div class="carta-texto" style="margin-top: 10px; font-size: 14px;">
                         Como las flores reales no duran para siempre, aquí te dejo un jardín con tus favoritas que florecerá para ti.
@@ -281,11 +281,8 @@
                         <div class="flower f5"><div class="flower-head tulip tulip-yellow"><div class="petal left"></div><div class="petal right"></div><div class="petal center"></div></div><div class="leaf leaf-left"></div><div class="stem" style="transform: scaleY(1)"></div></div>
                     </div>
                 </div>
-            </div>
-
-            <!-- PÁGINA 8: COSAS QUE AMO -->
-            <div class="paper" id="m7" style="z-index: 4;">
-                <div class="front">
+                <!-- COSAS QUE AMO (Izquierda) -->
+                <div class="back mobile-page">
                     <div class="page-num left">Pág. 7</div>
                     <h2>Cosas que amo de ti</h2>
                     <ul class="carta-texto" style="margin-left: 20px; margin-top:20px; line-height: 2; font-size: 15px;">
@@ -299,10 +296,11 @@
                 </div>
             </div>
 
-            <!-- PÁGINA 9: VALE -->
-            <div class="paper" id="m8" style="z-index: 3;">
-                <div class="front">
-                    <div class="page-num left">Pág. 8</div>
+            <!-- HOJA 5 -->
+            <div class="paper" style="z-index: 2;">
+                <!-- VALE (Derecha) -->
+                <div class="front mobile-page">
+                    <div class="page-num right">Pág. 8</div>
                     <h2>Solo para ti</h2>
                     <p class="subtitle">Porque te mereces el mundo entero.</p>
                     <div class="vale-descanso">
@@ -312,11 +310,8 @@
                         <p style="font-weight: normal; font-size: 13px;">Condiciones de uso:<br>Una vez canjeado no habrá marcha atrás, y por cierto también incluye invitación a un almuerzo.</p>
                     </div>
                 </div>
-            </div>
-
-            <!-- PÁGINA 10: CANCIÓN -->
-            <div class="paper" id="m9" style="z-index: 2;">
-                <div class="front">
+                <!-- CANCIÓN (Izquierda) -->
+                <div class="back mobile-page">
                     <div class="page-num left">Pág. 9</div>
                     <h2>Nuestra Canción 🎵</h2>
                     <p class="subtitle" style="margin-bottom: 15px;">Ponle play a nuestra historia.</p>
@@ -330,16 +325,20 @@
                 </div>
             </div>
 
-            <!-- PÁGINA 11: FINAL -->
-            <div class="paper" id="m10" style="z-index: 1;">
-                <div class="front portada">
-                    <div class="page-num left" style="color:white;">Pág. 10</div>
+            <!-- HOJA 6 -->
+            <div class="paper" style="z-index: 1;">
+                <!-- FINAL (Derecha) -->
+                <div class="front portada mobile-page">
+                    <div class="page-num right" style="color:white;">Pág. 10</div>
                     <h2 style="color:white; margin-top: 40px;">El final de este capítulo...</h2>
                     <div class="carta-texto" style="text-align: center; margin-top: 20px; font-size: 16px; color:white;">
                         Pero apenas el comienzo de muchísimos más a tu lado. <br><br>
                         Gracias por estos 6 meses tan hermosos. Te volvería a elegir una y mil veces más.
                     </div>
-                    <div style="text-align: center; font-size: 40px; margin-top: 20px;">♾️❤️</div>
+                </div>
+                <!-- CONTRAPORTADA (Izquierda, diseño limpio) -->
+                <div class="back portada mobile-page">
+                    <div style="text-align: center; font-size: 60px; margin-top: 45%;">♾️❤️</div>
                 </div>
             </div>
 
@@ -372,57 +371,66 @@
     setInterval(createHeart, 400);
 
     /* ==================================
-        CONTROL DE PÁGINAS (HÍBRIDO PC / MÓVIL)
+        CONTROL DE PÁGINAS (DOBLE HOJA PC / HÍBRIDO MÓVIL)
     ================================== */
-    const papers = [
-        document.querySelector("#m0"),
-        document.querySelector("#m1"), 
-        document.querySelector("#m2"), 
-        document.querySelector("#m3"),
-        document.querySelector("#m4"), 
-        document.querySelector("#m5"), 
-        document.querySelector("#m6"),
-        document.querySelector("#m7"),
-        document.querySelector("#m8"),
-        document.querySelector("#m9")
-    ];
-    
+    const papers = document.querySelectorAll(".paper"); // Hojas físicas
+    const mobilePages = document.querySelectorAll(".mobile-page"); // Vistas para el celular
     let pcLocation = 0;
-    const mobilePages = document.querySelectorAll(".paper");
     let mobileIndex = 0;
+
+    // Esta función mantiene el libro bien centrado en la pantalla de la PC cuando está abierto
+    function updateBookPosition() {
+        const book = document.getElementById("book");
+        if (window.innerWidth > 900) {
+            if (pcLocation === 0) {
+                // Cerrado mostrando la portada (centrado por defecto)
+                book.style.transform = "translateX(0)";
+            } else if (pcLocation === papers.length) {
+                // Completamente cerrado en la contraportada
+                book.style.transform = "translateX(450px)";
+            } else {
+                // Libro abierto (se corre a la derecha para que el centro quede exacto en el lomo)
+                book.style.transform = "translateX(225px)";
+            }
+        } else {
+            book.style.transform = "none";
+        }
+    }
 
     function nextPage() {
         if (window.innerWidth <= 900) {
-            // LÓGICA MÓVIL (Cambia la visibilidad de bloques verticalmente)
+            // Lógica para Celulares (Una hoja debajo de la otra de forma tradicional)
             if (mobileIndex < mobilePages.length - 1) {
                 mobilePages[mobileIndex].classList.remove('active-mobile');
                 mobileIndex++;
                 mobilePages[mobileIndex].classList.add('active-mobile');
             }
         } else {
-            // LÓGICA PC (Rota las páginas tridimensionalmente de forma individual)
+            // Lógica para PC (Abre como libro, mostrando dos caras)
             if (pcLocation < papers.length) {
                 papers[pcLocation].classList.add("flipped");
-                papers[pcLocation].style.zIndex = pcLocation + 1;
+                papers[pcLocation].style.zIndex = pcLocation + 1; // Ajusta para que queden bien apiladas en la izquierda
                 pcLocation++;
+                updateBookPosition();
             }
         }
     }
 
     function prevPage() {
         if (window.innerWidth <= 900) {
-            // LÓGICA MÓVIL
+            // Lógica para Celulares
             if (mobileIndex > 0) {
                 mobilePages[mobileIndex].classList.remove('active-mobile');
                 mobileIndex--;
                 mobilePages[mobileIndex].classList.add('active-mobile');
             }
         } else {
-            // LÓGICA PC
+            // Lógica para PC
             if (pcLocation > 0) {
                 pcLocation--;
                 papers[pcLocation].classList.remove("flipped");
-                papers[pcLocation].style.zIndex = papers.length - pcLocation + 1;
+                papers[pcLocation].style.zIndex = papers.length - pcLocation; // Reajusta al volver a la derecha
+                updateBookPosition();
             }
         }
     }
